@@ -2,9 +2,9 @@
 #include <mat.hpp>
 
 
-class BarcodeDetector {
+class BarcodeDetectionComponent {
 
     public:
-        int detect(cv::InputArray image);
+        std::vector<std::string> detect(cv::InputArray image);
 
 };
