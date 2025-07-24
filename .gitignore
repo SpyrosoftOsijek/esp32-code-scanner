@@ -3,3 +3,4 @@
 build/
 sdkconfig.old
 .clangd
+managed_components/
