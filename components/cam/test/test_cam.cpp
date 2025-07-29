@@ -11,7 +11,6 @@
 TEST_CASE("Camera capture returns framebuffer", "[cam]"){
     camera_config_t config = get_default_camera_config();
     Camera cam(config);
-    TEST_ASSERT_TRUE(cam.isInitialized());
     
     void* fb = cam.capture();
     TEST_ASSERT_NOT_NULL(fb);

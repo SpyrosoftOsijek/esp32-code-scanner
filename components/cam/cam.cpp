@@ -4,13 +4,17 @@
 
 
 Camera::Camera(camera_config_t config) : _config(config){
-    initialized  = init();
+    init();
+}
+
+Camera::Camera() {
+    _config = get_default_camera_config();
+    init();
 }
 
 Camera::~Camera() {
-    if (initialized) {
-        esp_camera_deinit();  
-    }
+    esp_camera_deinit();  
+    
 }
 
 camera_config_t get_default_camera_config() {
@@ -56,8 +60,6 @@ bool Camera::init() {
     return true;
 }
 
-
-
 void* Camera::capture() {
     return esp_camera_fb_get();
 }
@@ -66,7 +68,5 @@ void Camera::release(void* fb) {
     esp_camera_fb_return((camera_fb_t*)fb);
 }
 
-bool Camera::isInitialized() const {
-    return initialized;
-}
+
 

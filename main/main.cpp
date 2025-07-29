@@ -20,15 +20,7 @@
 extern "C" void app_main() {
     camera_config_t config = get_default_camera_config();
     Camera cam(config);
-    if (!cam.isInitialized()) {
-        ESP_LOGE("MAIN", "Camera failed to initialize");
-        while (true) {
-            ESP_LOGE("MAIN", "Camera failed, halting task");
-            vTaskDelay(2000); 
-}
-        return;
-    }
-
+    
     while (true) {
         void* fb = cam.capture();
         if (fb) {
