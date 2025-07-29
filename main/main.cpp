@@ -13,17 +13,18 @@
 #include "esp_chip_info.h"
 #include "esp_flash.h"
 #include "esp_system.h"
-
+#include "esp_camera.h"
 #include "cam.hpp"
 #include "esp_log.h"
 
 extern "C" void app_main() {
-    Camera cam;
-    if (!cam.init()) {
+    camera_config_t config = get_default_camera_config();
+    Camera cam(config);
+    if (!cam.isInitialized()) {
         ESP_LOGE("MAIN", "Camera failed to initialize");
         while (true) {
             ESP_LOGE("MAIN", "Camera failed, halting task");
-            vTaskDelay(pdMS_TO_TICKS(2000)); 
+            vTaskDelay(2000); 
 }
         return;
     }
@@ -37,6 +38,6 @@ extern "C" void app_main() {
             ESP_LOGE("MAIN", "Capture failed");
         }
 
-        vTaskDelay(pdMS_TO_TICKS(2000));  // 2s delay cuz monitor went crazy
+        vTaskDelay(2000);  // 2s delay cuz monitor went crazy
     }
 }

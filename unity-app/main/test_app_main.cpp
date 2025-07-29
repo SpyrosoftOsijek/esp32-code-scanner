@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "unity_test_utils.h"
 #include <unity_test_runner.h>
 #include <iostream>
 
