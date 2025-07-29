@@ -1,0 +1,26 @@
+dependencies:
+  espressif/opencv:
+    component_hash: 9a5e4f3453048ab05419bbef0e5ab67cc98be5e0d51d8a194f41c167c63921d5
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.4'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    targets:
+    - esp32
+    - esp32s2
+    - esp32s3
+    - esp32p4
+    version: 4.10.0~3
+  idf:
+    source:
+      type: idf
+    version: 6.0.0
+direct_dependencies:
+- espressif/opencv
+- idf
+manifest_hash: 0a329bfea5f24c757b2735870d502dbae0a6282ff2d87d6fdffd6193aa33ccba
+target: esp32s3
+version: 2.0.0

@@ -1,10 +1,10 @@
+#pragma once
+
 #include <stdio.h>
-#include <mat.hpp>
 
-
-class BarcodeDetectionComponent {
+class BarcodeReader {
 
     public:
-        std::vector<std::string> detect(cv::InputArray image);
+        int read(int image);
 
 };
