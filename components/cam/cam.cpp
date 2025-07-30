@@ -22,6 +22,7 @@ camera_config_t get_default_camera_config() {
 
     config.ledc_channel = LEDC_CHANNEL_0;
     config.ledc_timer   = LEDC_TIMER_0;
+
     config.pin_d0       = 11;
     config.pin_d1       = 9;
     config.pin_d2       = 8;
@@ -36,13 +37,16 @@ camera_config_t get_default_camera_config() {
     config.pin_href     = 7;
     config.pin_sccb_sda = 4;
     config.pin_sccb_scl = 5;
+
     config.pin_pwdn     = -1;
     config.pin_reset    = -1;
+
     config.xclk_freq_hz = 10000000;
-    config.pixel_format = PIXFORMAT_JPEG;
-    config.frame_size   = FRAMESIZE_QVGA;
-    config.jpeg_quality = 12;
+    config.pixel_format = PIXFORMAT_GRAYSCALE; // fixed DMA overflow -> cam needed more space so PSRAM Was enabled in menuconfig
+    config.frame_size   = FRAMESIZE_QVGA; 
     config.fb_count     = 1;
+
+    config.jpeg_quality = 12;
 
     return config;
 
@@ -60,12 +64,12 @@ bool Camera::init() {
     return true;
 }
 
-void* Camera::capture() {
+camera_fb_t* Camera::capture() { // void gave no info about whats inside pointer 
     return esp_camera_fb_get();
 }
 
-void Camera::release(void* fb) {
-    esp_camera_fb_return((camera_fb_t*)fb);
+void Camera::release(camera_fb_t* fb) { // changed fb type from void
+    esp_camera_fb_return(fb);
 }
 
 

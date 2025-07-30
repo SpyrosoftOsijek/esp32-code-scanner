@@ -6,12 +6,10 @@
 
 #include <stdio.h>
 
-#include <inttypes.h>
-#include "sdkconfig.h"
+
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_chip_info.h"
-#include "esp_flash.h"
 #include "esp_system.h"
 #include "esp_camera.h"
 #include "cam.hpp"
@@ -22,7 +20,7 @@ extern "C" void app_main() {
     Camera cam(config);
     
     while (true) {
-        void* fb = cam.capture();
+        camera_fb_t* fb = cam.capture();
         if (fb) {
             ESP_LOGI("MAIN", "Captured frame");
             cam.release(fb);
@@ -30,6 +28,8 @@ extern "C" void app_main() {
             ESP_LOGE("MAIN", "Capture failed");
         }
 
-        vTaskDelay(2000);  // 2s delay cuz monitor went crazy
+        vTaskDelay(pdMS_TO_TICKS(2000));  // 2s delay cuz monitor went crazy
     }
+
+    
 }

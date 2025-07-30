@@ -18,8 +18,8 @@ class Camera {
 
         Camera& operator=(Camera& obj) = delete;
 
-        void* capture();
-        void release(void* fb);
+        camera_fb_t* capture();
+        void release(camera_fb_t* fb);
 
 private:
         bool init();
