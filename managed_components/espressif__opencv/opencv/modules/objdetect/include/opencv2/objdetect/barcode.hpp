@@ -6,7 +6,7 @@
 #ifndef OPENCV_OBJDETECT_BARCODE_HPP
 #define OPENCV_OBJDETECT_BARCODE_HPP
 
-#include <opencv2/core.hpp>
+#include <../../../../core/include/opencv2/core.hpp>
 #include <opencv2/objdetect/graphical_code_detector.hpp>
 
 namespace cv {

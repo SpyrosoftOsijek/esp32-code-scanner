@@ -10,9 +10,6 @@
 #include <unity_test_runner.h>
 
 
-static void print_banner(const char * text);
-
-
 extern "C" void app_main(void) {
     UNITY_BEGIN();              
     unity_run_all_tests();

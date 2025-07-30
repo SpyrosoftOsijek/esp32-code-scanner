@@ -5,7 +5,8 @@ include($ENV{IDF_PATH}/tools/cmake/version.cmake)
 
 # Add newly added components to one of these lines:
 # 1. Add here if the component is compatible with IDF >= v4.3
-set(EXTRA_COMPONENT_DIRS "../components")
+set(EXTRA_COMPONENT_DIRS    "../components"
+                            "../components/barcode_reader")
 
 set(TEST_COMPONENTS "barcode_reader")
 
