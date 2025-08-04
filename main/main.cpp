@@ -14,22 +14,32 @@
 #include "esp_camera.h"
 #include "cam.hpp"
 #include "esp_log.h"
+#include "raw_img.hpp"
 
 extern "C" void app_main() {
-    camera_config_t config = get_default_camera_config();
-    Camera cam(config);
-    
-    while (true) {
-        camera_fb_t* fb = cam.capture();
-        if (fb) {
-            ESP_LOGI("MAIN", "Captured frame");
-            cam.release(fb);
-        } else {
-            ESP_LOGE("MAIN", "Capture failed");
+    try {
+
+        
+        Camera cam{};
+        
+        while (true) {
+            try {
+                auto image = cam.capture();
+
+                // Handle capture exception
+
+                //std::cout << "**********************"<< static_cast<uint32_t>(image->getPixel(0,0)) << ' ';
+                // ESP_LOGI("MAIN", "Captured frame");
+
+            } catch (const CameraCaptureException& e) {
+                ESP_LOGE("MAIN", "Capture failed: %s", e.what());
+                abort();
+            }
+            vTaskDelay(pdMS_TO_TICKS(400));  
         }
+    } catch (const CameraInitException& e) {
+        ESP_LOGE("MAIN", "Fatal error during camera setup: %s", e.what());
 
-        vTaskDelay(pdMS_TO_TICKS(2000));  // 2s delay cuz monitor went crazy
+        abort(); // kills app
     }
-
-    
 }

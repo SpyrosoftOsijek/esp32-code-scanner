@@ -3,74 +3,33 @@
 #include "esp_mac.h"
 
 
-Camera::Camera(camera_config_t config) : _config(config){
-    init();
-}
-
-Camera::Camera() {
-    _config = get_default_camera_config();
-    init();
-}
-
-Camera::~Camera() {
-    esp_camera_deinit();  
-    
-}
-
-camera_config_t get_default_camera_config() {
-    camera_config_t config;
-
-    config.ledc_channel = LEDC_CHANNEL_0;
-    config.ledc_timer   = LEDC_TIMER_0;
-
-    config.pin_d0       = 11;
-    config.pin_d1       = 9;
-    config.pin_d2       = 8;
-    config.pin_d3       = 10;
-    config.pin_d4       = 12;
-    config.pin_d5       = 18;
-    config.pin_d6       = 17;
-    config.pin_d7       = 16;
-    config.pin_xclk     = 15;
-    config.pin_pclk     = 13;
-    config.pin_vsync    = 6;
-    config.pin_href     = 7;
-    config.pin_sccb_sda = 4;
-    config.pin_sccb_scl = 5;
-
-    config.pin_pwdn     = -1;
-    config.pin_reset    = -1;
-
-    config.xclk_freq_hz = 10000000;
-    config.pixel_format = PIXFORMAT_GRAYSCALE; // fixed DMA overflow -> cam needed more space so PSRAM Was enabled in menuconfig
-    config.frame_size   = FRAMESIZE_QVGA; 
-    config.fb_count     = 1;
-
-    config.jpeg_quality = 12;
-
-    return config;
-
-}
 
 
-bool Camera::init() {
+Camera::Camera(camera_config_t config) : _config(config) //initializer list 
+{
     esp_err_t err = esp_camera_init(&_config);
     if (err != ESP_OK) {
-        ESP_LOGE("CAMERA", "Camera init failed: 0x%x", err);
-        return false;
+        throw CameraInitException("Camera init failed!"); 
     }
-
     ESP_LOGI("CAMERA", "Camera initialized successfully");
-    return true;
 }
 
-camera_fb_t* Camera::capture() { // void gave no info about whats inside pointer 
-    return esp_camera_fb_get();
+Camera::Camera() : Camera::Camera(DEFAULT_CAMERA_CONFIG)
+{
 }
 
-void Camera::release(camera_fb_t* fb) { // changed fb type from void
+Camera::~Camera()
+{
+    esp_camera_deinit();
+}
+
+std::shared_ptr<rawImg> Camera::capture()
+{ // void gave no info about whats inside pointer
+    camera_fb_t *fb = esp_camera_fb_get();
+    if (!fb) {
+        throw std::runtime_error("Failed to get frame buffer");
+    }
+    img_->fromFramebuffer(fb->buf, fb->width, fb->height);
     esp_camera_fb_return(fb);
+    return img_;
 }
-
-
-

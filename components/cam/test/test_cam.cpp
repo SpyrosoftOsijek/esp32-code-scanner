@@ -5,15 +5,19 @@
 #include "esp_camera.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "raw_img.hpp"
+
 
 // static const char* TAG = "CAMERA_TEST"; // limits variable scope to this file 
 
 TEST_CASE("Camera capture returns framebuffer", "[cam]"){
-    camera_config_t config = get_default_camera_config();
-    Camera cam(config);
-    
-    camera_fb_t* fb = cam.capture();
-    TEST_ASSERT_NOT_NULL(fb);
+    Camera cam{};
 
-    cam.release(fb);
+
+    std::shared_ptr<rawImg> img = cam.capture();
+    TEST_ASSERT_NOT_NULL(img.get());
+
+    
+
+    TEST_ASSERT_EQUAL_UINT8(IMG_HEIGHT, img->imgHeight());
 }
