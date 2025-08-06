@@ -4,37 +4,31 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-#include <stdio.h>
-#include <inttypes.h>
-#include "sdkconfig.h"
-#include "freertos/FreeRTOS.h"
+#include "wifi_component.hpp"
 #include "freertos/task.h"
-#include "esp_chip_info.h"
-#include "esp_flash.h"
+#include <inttypes.h>
+#include "freertos/task.h"
 #include "esp_system.h"
-
-#include "camera_component.hpp"
 #include "esp_log.h"
 
 extern "C" void app_main() {
-    Camera cam;
-    if (!cam.init()) {
-        ESP_LOGE("MAIN", "Camera failed to initialize");
-        while(true)  {
-            
-        }
-        return;
-    }
+    
+    esp_err_t status = WIFI_FAILURE;
 
-    while (true) {
-        camera_fb_t* fb = cam.capture();
-        if (fb) {
-            ESP_LOGI("MAIN", "Captured frame, size: %d bytes", fb->len);
-            cam.release(fb);
-        } else {
-            ESP_LOGE("MAIN", "Capture failed");
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(2000));  // 2s delay cuz monitor went crazy
+    // init storage
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
     }
+    ESP_ERROR_CHECK(ret);
+
+    // connect to wireless AP
+	status = connect_wifi();
+	if (WIFI_SUCCESS != status)
+	{
+		ESP_LOGI("WIFI", "Failed to associate to AP, dying...");
+		return;
+	}
+
 }
