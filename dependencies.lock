@@ -17,7 +17,7 @@ dependencies:
       require: private
       version: '>=5.0'
     source:
-      registry_url: https://components.espressif.com/
+      registry_url: https://components.espressif.com
       type: service
     version: 1.3.1
   idf:
@@ -26,7 +26,6 @@ dependencies:
     version: 5.5.0
 direct_dependencies:
 - espressif/esp32-camera
-- espressif/esp_jpeg
-manifest_hash: 14c1499c34d09368bdd14bfa3cec9e7058b54e6c1d16b16cc6c7fbc8665b417f
+manifest_hash: 4ccc172cdee12fcfadc31c00f190f99d586989a3af3a1e4c32781309c19406b7
 target: esp32s3
 version: 2.0.0
