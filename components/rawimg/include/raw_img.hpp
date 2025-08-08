@@ -17,7 +17,6 @@ struct rawImg
         return image.size();
     }
 
-    // logic for 1d to 2d array (based upon our img width), static, return type
     void fromFramebuffer(uint8_t *buf, size_t width, size_t height)
     {
         for (int row = 0; row < height; row++)
