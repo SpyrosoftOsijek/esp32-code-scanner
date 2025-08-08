@@ -1,4 +1,4 @@
-#pragma once // same as ifndef endif
+#pragma once
 
 #include <iostream>
 #include <memory>
@@ -6,32 +6,35 @@
 #include "raw_img.hpp"
 
 // Camera init exception type
-class CameraInitException : public std::exception {
-    public: 
-    explicit CameraInitException(const char* message) : msg_(message) {}
-    
-    const char* what() const noexcept override {
-        return msg_;
-    }
-
-    private: 
-    const char* msg_;
-};
-
-class CameraCaptureException : public std::exception {
-    public: 
-    explicit CameraCaptureException(const char* message) : msg_(message) {}
-    
-    const char* what() const noexcept override {
-        return msg_;
-    }
-
-    private: 
-    const char* msg_;
-};
-
-static constexpr camera_config_t DEFAULT_CAMERA_CONFIG
+class CameraInitException : public std::exception
 {
+public:
+    explicit CameraInitException(const char *message) : msg_(message) {}
+
+    const char *what() const noexcept override
+    {
+        return msg_;
+    }
+
+private:
+    const char *msg_;
+};
+
+class CameraCaptureException : public std::exception
+{
+public:
+    explicit CameraCaptureException(const char *message) : msg_(message) {}
+
+    const char *what() const noexcept override
+    {
+        return msg_;
+    }
+
+private:
+    const char *msg_;
+};
+
+static constexpr camera_config_t DEFAULT_CAMERA_CONFIG{
     .pin_pwdn = -1,
     .pin_reset = -1,
     .pin_xclk = 15,
@@ -60,21 +63,22 @@ static constexpr camera_config_t DEFAULT_CAMERA_CONFIG
     .sccb_i2c_port = 1,
 };
 
-class Camera {
-    public:
-        Camera(camera_config_t config);
+class Camera
+{
+public:
+    Camera(camera_config_t config);
 
-        Camera();
-        
-        ~Camera();
-        
-        Camera(Camera& obj) = delete;
+    Camera();
 
-        Camera& operator=(Camera& obj) = delete;
+    ~Camera();
 
-        std::shared_ptr<rawImg> capture();
-        
-    private:
-        camera_config_t _config;
-        std::shared_ptr<rawImg> img_ = {std::make_unique<rawImg>()};
+    Camera(Camera &obj) = delete;
+
+    Camera &operator=(Camera &obj) = delete;
+
+    std::shared_ptr<rawImg> capture();
+
+private:
+    camera_config_t _config;
+    std::shared_ptr<rawImg> img_ = {std::make_unique<rawImg>()};
 };

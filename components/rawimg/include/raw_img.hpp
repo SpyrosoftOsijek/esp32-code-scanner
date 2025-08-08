@@ -3,31 +3,34 @@
 #include <array>
 #include <memory>
 
-//our img format
-#define IMG_WIDTH 320 
-#define IMG_HEIGHT 240 
+// our img format
+#define IMG_WIDTH 320
+#define IMG_HEIGHT 240
 
-struct rawImg {
+struct rawImg
+{
 
     std::array<std::array<uint8_t, IMG_WIDTH>, IMG_HEIGHT> image;
 
-
-    size_t imgHeight() {
+    size_t imgHeight()
+    {
         return image.size();
     }
 
     // logic for 1d to 2d array (based upon our img width), static, return type
-    void fromFramebuffer(uint8_t * buf, size_t width, size_t height) {
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
+    void fromFramebuffer(uint8_t *buf, size_t width, size_t height)
+    {
+        for (int row = 0; row < height; row++)
+        {
+            for (int col = 0; col < width; col++)
+            {
                 image[row][col] = buf[row * width + col];
             }
         }
     }
 
-
-    uint8_t getPixel(int row, int col) {
+    uint8_t getPixel(int row, int col)
+    {
         return image[row][col];
     }
-    
 };

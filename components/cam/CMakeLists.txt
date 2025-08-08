@@ -1,4 +1,3 @@
 idf_component_register(SRCS "cam.cpp"
                        INCLUDE_DIRS "include" 
-                       REQUIRES esp32-camera
-                       myimg)
+                       REQUIRES esp32-camera rawimg)
