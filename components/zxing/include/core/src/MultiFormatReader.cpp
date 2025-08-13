@@ -9,12 +9,12 @@
 #include "BarcodeFormat.h"
 #include "BinaryBitmap.h"
 #include "ReaderOptions.h"
-#include "aztec/AZReader.h"
-#include "datamatrix/DMReader.h"
-#include "maxicode/MCReader.h"
+// #include "aztec/AZReader.h"
+// #include "datamatrix/DMReader.h"
+// #include "maxicode/MCReader.h"
 #include "oned/ODReader.h"
-#include "pdf417/PDFReader.h"
-#include "qrcode/QRReader.h"
+// #include "pdf417/PDFReader.h"
+// #include "qrcode/QRReader.h"
 
 #include <memory>
 
@@ -25,19 +25,19 @@ MultiFormatReader::MultiFormatReader(const ReaderOptions& opts) : _opts(opts)
 	auto formats = opts.formats().empty() ? BarcodeFormat::Any : opts.formats();
 
 	// Put linear readers upfront in "normal" mode
-	if (formats.testFlags(BarcodeFormat::LinearCodes) && !opts.tryHarder())
-		_readers.emplace_back(new OneD::Reader(opts));
+	// if (formats.testFlags(BarcodeFormat::LinearCodes) && !opts.tryHarder())
+	// 	_readers.emplace_back(new OneD::Reader(opts));
 
-	if (formats.testFlags(BarcodeFormat::QRCode | BarcodeFormat::MicroQRCode | BarcodeFormat::RMQRCode))
-		_readers.emplace_back(new QRCode::Reader(opts, true));
-	if (formats.testFlag(BarcodeFormat::DataMatrix))
-		_readers.emplace_back(new DataMatrix::Reader(opts, true));
-	if (formats.testFlag(BarcodeFormat::Aztec))
-		_readers.emplace_back(new Aztec::Reader(opts, true));
-	if (formats.testFlag(BarcodeFormat::PDF417))
-		_readers.emplace_back(new Pdf417::Reader(opts));
-	if (formats.testFlag(BarcodeFormat::MaxiCode))
-		_readers.emplace_back(new MaxiCode::Reader(opts));
+	// if (formats.testFlags(BarcodeFormat::QRCode | BarcodeFormat::MicroQRCode | BarcodeFormat::RMQRCode))
+	// 	_readers.emplace_back(new QRCode::Reader(opts, true));
+	// if (formats.testFlag(BarcodeFormat::DataMatrix))
+	// 	_readers.emplace_back(new DataMatrix::Reader(opts, true));
+	// if (formats.testFlag(BarcodeFormat::Aztec))
+	// 	_readers.emplace_back(new Aztec::Reader(opts, true));
+	// if (formats.testFlag(BarcodeFormat::PDF417))
+	// 	_readers.emplace_back(new Pdf417::Reader(opts));
+	// if (formats.testFlag(BarcodeFormat::MaxiCode))
+	// 	_readers.emplace_back(new MaxiCode::Reader(opts));
 
 	// At end in "try harder" mode
 	if (formats.testFlags(BarcodeFormat::LinearCodes) && opts.tryHarder())
