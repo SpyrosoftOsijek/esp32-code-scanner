@@ -1,17 +1,25 @@
 #include "include/barcode_reader.hpp"
-#include "core/src/ReadBarcode.h"
-#include "core/src/Barcode.h"
+#include "ReadBarcode.h"
+#include "Barcode.h"
 #include <iostream>
 #include <stdio.h>
 #include <string>
 
-#define width 154
-#define height 2
+#include "raw_img.hpp"
 
-std::string BarcodeReader::read(const uint8_t raw_image[2][154])
+
+ 
+std::string BarcodeReader::read(std::shared_ptr<rawImg> img)
 {
-    auto image = ZXing::ImageView((const uint8_t*)raw_image, width, height, ZXing::ImageFormat::Lum, 0, 0);
+    // const uint8_t* pixels = &img.image[0][0];   
+    ZXing::ImageView iv(reinterpret_cast<uint8_t*>(&img->image), IMG_WIDTH, IMG_HEIGHT, ZXing::ImageFormat::Lum, IMG_WIDTH);
+
+
     auto options = ZXing::ReaderOptions().setFormats(ZXing::BarcodeFormat::Any);
-    auto barcode = ZXing::ReadBarcode(image, options);
-    return barcode.text();
+    auto results = ZXing::ReadBarcodes(iv, options);
+
+    if (!results.empty()) {
+        return results[0].text();
+    }
+    return {};
 }

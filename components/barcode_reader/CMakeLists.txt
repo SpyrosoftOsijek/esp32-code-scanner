@@ -1,15 +1,8 @@
-set (ZXING_READERS true)
-set(zxing_ROOT
-    "${CMAKE_CURRENT_LIST_DIR}/../zxing")
-
-file(GLOB zxing_SOURCES
-    "${zxing_ROOT}/include/core/src/*cpp"
+idf_component_register(
+    SRCS "barcode_reader.cpp"
+    INCLUDE_DIRS "include"
+    REQUIRES zxing rawimg
 )
 
-idf_component_register( SRCS "barcode_reader.cpp"
-                        ${zxing_SOURCES}
-                                
-                        INCLUDE_DIRS include
-                        ${zxing_ROOT}/include
-                        ${zxing_ROOT}/include/core/src
-                        REQUIRES zxing)
+target_compile_options(${COMPONENT_LIB} PRIVATE -fexceptions)
+target_compile_definitions(${COMPONENT_LIB} PRIVATE ZXING_USE_CPP17=1 ZXING_NO_EXCEPTIONS=0)
