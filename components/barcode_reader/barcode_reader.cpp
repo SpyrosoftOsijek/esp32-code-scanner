@@ -8,6 +8,7 @@
 #define width 154
 #define height 2
 
+
 std::string BarcodeReader::read(const uint8_t raw_image[2][154])
 {
     auto image = ZXing::ImageView((const uint8_t*)raw_image, width, height, ZXing::ImageFormat::Lum, 0, 0);
