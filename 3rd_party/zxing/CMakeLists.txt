@@ -1,14 +1,12 @@
-file(GLOB zxing_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/zxing/core/src/*
-    ${CMAKE_CURRENT_LIST_DIR}/zxing/core/src/oned/*
-    ${CMAKE_CURRENT_LIST_DIR}/zxing/core/src/libzueci/*)
-
+file(GLOB_RECURSE zxing_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/zxing/core/src/*.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/zxing/core/src/libzueci/*.c"
+    )
 
 idf_component_register( SRCS ${zxing_SOURCES}
                         INCLUDE_DIRS 
-                            "zxing" 
-                            ${CMAKE_CURRENT_BINARY_DIR} 
-                            ${CMAKE_CURRENT_LIST_DIR}/zxing/core/src/)
+                            ${CMAKE_CURRENT_LIST_DIR}/zxing/core
+                            ${CMAKE_CURRENT_LIST_DIR}/zxing/core/src)
 
 target_compile_definitions(${COMPONENT_LIB} PRIVATE
     ZXING_READERS=1

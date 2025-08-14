@@ -12,39 +12,31 @@
 #include "barcode_reader.hpp"
 #include <string>
 
+
+
 extern "C" void app_main()
 {
-
-    const uint8_t data[2][154] = {{  0,  0,  0,  0, 255, 255,  0,  0, 255, 255, 255, 255, 255, 255, 255, 255,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255, 255, 255,  0,  0,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0,  0,  0, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255,  0,  0, 255, 255, 255, 255, 255, 255, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255,  0,  0, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255, 255, 255, 255, 255, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255, 255, 255,  0,  0,  0,  0,  0,  0, 255, 255,  0,  0, 255, 255,  0,  0,  0,  0},
-                                  {  0,  0,  0,  0, 255, 255,  0,  0, 255, 255, 255, 255, 255, 255, 255, 255,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255, 255, 255,  0,  0,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0,  0,  0, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255,  0,  0, 255, 255, 255, 255, 255, 255, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255,  0,  0, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255,  0,  0, 255, 255, 255, 255, 255, 255, 255, 255,  0,  0,  0,  0, 255, 255, 255, 255, 255, 255,  0,  0,  0,  0,  0,  0, 255, 255,  0,  0, 255, 255,  0,  0,  0,  0}};
-    
-    BarcodeReader reader;
-    std::string result = reader.read(data);
-    std::cout << result << '\n';
-
-    std::cout << "TESTTESTTESTTESTTESTTESTTESTTEST\n";
-    std::cout << result << '\n';
-    std::cout << "TESTTESTTESTTESTTESTTESTTESTTEST\n";
 
     try
     {
 
         Camera cam{};
-
+        BarcodeReader reader;
         while (true)
         {
-
             try
             {
                 auto image = cam.capture();
+
+                std::string result = reader.read(image);
+                std::cout << "Loop" << result << std::endl;
             }
             catch (const CameraCaptureException &e)
             {
                 ESP_LOGE("MAIN", "Capture failed: %s", e.what());
                 abort();
             }
-            vTaskDelay(pdMS_TO_TICKS(4000));
-            
+            vTaskDelay(pdMS_TO_TICKS(400));
         }
     }
     catch (const CameraInitException &e)
