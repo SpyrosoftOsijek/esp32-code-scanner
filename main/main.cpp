@@ -71,3 +71,4 @@ extern "C" void app_main()
         abort(); // kills app
     }
 }
+
