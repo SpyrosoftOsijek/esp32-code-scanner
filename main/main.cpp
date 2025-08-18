@@ -43,8 +43,6 @@ extern "C" void app_main()
           return;
         }
 
-        const char *test_barcode = "12345";
-
 
         Camera cam{};
         BarcodeReader reader;
@@ -53,14 +51,16 @@ extern "C" void app_main()
             try
             {
                 auto image = cam.capture();
-
+                std::string result = reader.read(image);
+                const char *barcode = result.c_str();
+                send_barcode_post(barcode);
             }
             catch (const CameraCaptureException &e)
             {
                 ESP_LOGE("MAIN", "Capture failed: %s", e.what());
                 abort();
             }
-            send_barcode_post(test_barcode);
+            
             vTaskDelay(pdMS_TO_TICKS(400));
         }
     }

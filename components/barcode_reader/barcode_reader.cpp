@@ -11,7 +11,6 @@
  
 std::string BarcodeReader::read(std::shared_ptr<rawImg> img)
 {
-    // const uint8_t* pixels = &img.image[0][0];   
     ZXing::ImageView iv(reinterpret_cast<uint8_t*>(&img->image), IMG_WIDTH, IMG_HEIGHT, ZXing::ImageFormat::Lum, IMG_WIDTH);
 
 
