@@ -140,7 +140,7 @@ void send_barcode_post(const char* barcode) {
 
     //set config
     esp_http_client_config_t config = {};
-    config.url = "https://webhook.site/81ceff9a-6bf4-43a8-8d1b-51858e21500c",
+    config.url = "http://127.0.0.1:5000",
     config.method = HTTP_METHOD_POST;
     config.cert_pem = NULL; 
 

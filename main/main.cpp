@@ -54,8 +54,6 @@ extern "C" void app_main()
             {
                 auto image = cam.capture();
 
-                std::string result = reader.read(image);
-                std::cout << "Loop" << result << std::endl;
             }
             catch (const CameraCaptureException &e)
             {
