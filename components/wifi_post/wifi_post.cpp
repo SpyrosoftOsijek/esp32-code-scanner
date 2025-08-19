@@ -1,14 +1,6 @@
-#include "wifi_post_component.hpp"
+#include "wifi_post.hpp"
 
-#include <inttypes.h>
-#include <string.h>
-#include "freertos/event_groups.h"
 #include "esp_netif.h"
-#include "esp_event.h"
-#include "esp_log.h"
-#include "esp_http_client.h"
-
-
 
 // event group to contain status information
 static EventGroupHandle_t wifi_event_group;
@@ -52,7 +44,6 @@ static void ip_event_handler(void *arg, esp_event_base_t event_base,
     }
 }
 
-// connect to wifi and return the result
 esp_err_t connect_wifi()
 {
     int status = WIFI_FAILURE;
@@ -83,7 +74,6 @@ esp_err_t connect_wifi()
                                                         NULL,
                                                         &got_ip_event_instance));
 
-    /** START THE WIFI DRIVER **/
     wifi_config_t wifi_config = {
         .sta = {
             .ssid = "HONOR 90",
@@ -109,8 +99,6 @@ esp_err_t connect_wifi()
                                            pdFALSE,
                                            portMAX_DELAY);
 
-    /* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
-     * happened. */
     if (bits & WIFI_SUCCESS)
     {
         ESP_LOGI(TAG, "Connected to ap");
@@ -135,57 +123,47 @@ esp_err_t connect_wifi()
     return status;
 }
 
-void send_barcode_post(const char* barcode) {
+void send_barcode_post(const char *barcode)
+{
 
-
-    //set config
     esp_http_client_config_t config = {};
     config.url = "https://webhook.site/81ceff9a-6bf4-43a8-8d1b-51858e21500c",
     config.method = HTTP_METHOD_POST;
-    config.cert_pem = NULL; 
+    config.cert_pem = NULL;
 
-
-
-    
     esp_http_client_handle_t client = esp_http_client_init(&config);
-    if(client == NULL) {
-        ESP_LOGE("HTTP_TAG", "Failed to initialize HTTP Client!" );
+    if (client == NULL)
+    {
+        ESP_LOGE("HTTP_TAG", "Failed to initialize HTTP Client!");
         return;
     }
-    
-    
 
-    //content type header
-    esp_http_client_set_header(client, "Content-Type", "application/json" );
+    esp_http_client_set_header(client, "Content-Type", "application/json");
 
-    // format json
     char post_data[64];
 
     cJSON *root = cJSON_CreateObject();
     cJSON_AddStringToObject(root, "barcode", barcode);
-    char *json_str = cJSON_PrintUnformatted(root);  //s string na heapu
+    char *json_str = cJSON_PrintUnformatted(root);
 
     strncpy(post_data, json_str, sizeof(post_data));
 
     cJSON_Delete(root);
-    free(json_str); 
+    free(json_str);
 
-    // put data to post
-    esp_http_client_set_post_field(client, post_data,sizeof(post_data));
+    esp_http_client_set_post_field(client, post_data, sizeof(post_data));
 
-    // odradi http request
     esp_err_t err = esp_http_client_perform(client);
 
-    if ( err == ESP_OK) {
+    if (err == ESP_OK)
+    {
         int status = esp_http_client_get_status_code(client);
         ESP_LOGI("HTTP_TAG", "POST succeeded, status = %d", status);
-    } else {
+    }
+    else
+    {
         ESP_LOGE("HTTP_TAG", "HTTP POST failed: %s", esp_err_to_name(err));
     }
 
-    // 
     esp_http_client_cleanup(client);
-
 }
-
-
