@@ -13,14 +13,36 @@
 #include <iostream>
 #include <string>
 
-
 extern "C" void app_main()
 {
-    BarcodeReader reader;
-    std::shared_ptr<rawImg> image = {};
-    ZXing::Barcodes results = reader.read(image);
-    std::cout << "Loop";
-    for(ZXing::Barcode result : results) std::cout << " " << result.text();
-    std::cout << std::endl;
-}
+    try
+    {
 
+        Camera cam{};
+
+        while (true)
+        {
+            try
+            {
+                auto image = cam.capture();
+                BarcodeReader reader;
+                ZXing::Barcodes results = reader.read(image);
+                std::cout << "Loop";
+                for(ZXing::Barcode result : results) std::cout << " " << result.text();
+                std::cout << std::endl;
+            }
+            catch (const CameraCaptureException &e)
+            {
+                ESP_LOGE("MAIN", "Capture failed: %s", e.what());
+                abort();
+            }
+            vTaskDelay(pdMS_TO_TICKS(400));
+        }
+    }
+    catch (const CameraInitException &e)
+    {
+        ESP_LOGE("MAIN", "Fatal error during camera setup: %s", e.what());
+
+        abort(); // kills app
+    }
+}
