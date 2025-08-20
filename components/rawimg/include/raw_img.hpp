@@ -17,6 +17,16 @@ struct rawImg
         return image.size();
     }
 
+    int height()
+    {
+        return IMG_HEIGHT;
+    }
+
+    int width()
+    {
+        return IMG_WIDTH;
+    }
+
     void fromFramebuffer(uint8_t *buf, size_t width, size_t height)
     {
         for (int row = 0; row < height; row++)

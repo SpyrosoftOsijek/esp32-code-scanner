@@ -5,44 +5,19 @@
  */
 
 #include "freertos/FreeRTOS.h"
-#include "esp_camera.h"
-#include "cam.hpp"
-#include "esp_log.h"
 #include "raw_img.hpp"
 #include "barcode_reader.hpp"
+#include "Barcode.h"
+#include <iostream>
 #include <string>
-
 
 
 extern "C" void app_main()
 {
-
-    try
-    {
-
-        Camera cam{};
-        BarcodeReader reader;
-        while (true)
-        {
-            try
-            {
-                auto image = cam.capture();
-
-                std::string result = reader.read(image);
-                std::cout << "Loop" << result << std::endl;
-            }
-            catch (const CameraCaptureException &e)
-            {
-                ESP_LOGE("MAIN", "Capture failed: %s", e.what());
-                abort();
-            }
-            vTaskDelay(pdMS_TO_TICKS(400));
-        }
-    }
-    catch (const CameraInitException &e)
-    {
-        ESP_LOGE("MAIN", "Fatal error during camera setup: %s", e.what());
-
-        abort(); // kills app
-    }
+    BarcodeReader reader;
+    std::shared_ptr<rawImg> image = {};
+    ZXing::Barcodes results = reader.read(image);
+    std::cout << "Loop";
+    for(ZXing::Barcode result : results) std::cout << " " << result.text();
+    std::cout << std::endl;
 }

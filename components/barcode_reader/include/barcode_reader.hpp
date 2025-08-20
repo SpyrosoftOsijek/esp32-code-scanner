@@ -1,12 +1,10 @@
-#pragma once
-
-#include <stdio.h>
 #include <string>
+#include "Barcode.h"
 #include "raw_img.hpp"
 
 class BarcodeReader {
 
     public:
-        std::string read(std::shared_ptr<rawImg> img);
+        ZXing::Barcodes read(std::shared_ptr<rawImg> img);
 
 };
