@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
+#include "wifi_post_component.hpp"
+#include "freertos/task.h"
+#include <inttypes.h>
+#include "freertos/task.h"
+#include "esp_system.h"
 #include "freertos/FreeRTOS.h"
 #include "raw_img.hpp"
 #include "barcode_reader.hpp"
@@ -21,3 +26,4 @@ extern "C" void app_main()
     for(ZXing::Barcode result : results) std::cout << " " << result.text();
     std::cout << std::endl;
 }
+
