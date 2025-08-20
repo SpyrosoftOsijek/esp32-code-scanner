@@ -1,4 +1,5 @@
 idf_component_register(SRCS "main.cpp"
                        INCLUDE_DIRS "."
-                        )
+                       REQUIRES cam spi_flash 
+                       )
 
