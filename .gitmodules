@@ -2,3 +2,6 @@
 	path = 3rd_party/zxing/zxing
 	url = https://github.com/zxing-cpp/zxing-cpp.git
 	version = v2.3.0
+[submodule "3rd_party/zxing/zxing-cpp"]
+	path = 3rd_party/zxing/zxing-cpp
+	url = https://github.com/zxing-cpp/zxing-cpp.git
