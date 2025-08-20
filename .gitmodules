@@ -1,0 +1,5 @@
+[submodule "3rd_party/zxing/zxing"]
+	path = 3rd_party/zxing/zxing
+	url = https://github.com/zxing-cpp/zxing-cpp.git
+	version = v2.3.0
+
