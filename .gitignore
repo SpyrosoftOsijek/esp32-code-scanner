@@ -5,4 +5,5 @@ sdkconfig.old
 .clangd
 managed_components/
 dependencies.lock
-
+unity-app/dependencies.lock
+unity-app/__pycache__/

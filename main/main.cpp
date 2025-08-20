@@ -1,28 +1,60 @@
+/*
+ * SPDX-FileCopyrightText: 2010-2022 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+#include "freertos/FreeRTOS.h"
+#include "esp_camera.h"
+#include "cam.hpp"
+#include "esp_log.h"
+#include "raw_img.hpp"
 #include "wifi_post.hpp"
 
 extern "C" void app_main()
 {
-
-  esp_err_t status = WIFI_FAILURE;
-
-  esp_err_t ret = nvs_flash_init();
-  if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+  try
   {
-    ESP_ERROR_CHECK(nvs_flash_erase());
-    ret = nvs_flash_init();
-  }
-  ESP_ERROR_CHECK(ret);
+    esp_err_t status = WIFI_FAILURE;
 
-  status = connect_wifi();
-  if (WIFI_SUCCESS != status)
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
+    status = connect_wifi();
+    if (WIFI_SUCCESS != status)
+    {
+      ESP_LOGI("WIFI", "Failed to associate to AP, dying...");
+      return;
+    }
+    Camera cam{};
+
+    while (true)
+    {
+      try
+      {
+        auto image = cam.capture();
+      }
+      catch (const CameraCaptureException &e)
+      {
+        ESP_LOGE("MAIN", "Capture failed: %s", e.what());
+        abort();
+      }
+      vTaskDelay(pdMS_TO_TICKS(400));
+    }
+    const char *test_barcode = "12345";
+
+    send_barcode_post(test_barcode);
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+  }
+  catch (const CameraInitException &e)
   {
-    ESP_LOGI("WIFI", "Failed to associate to AP, dying...");
-    return;
+    ESP_LOGE("MAIN", "Fatal error during camera setup: %s", e.what());
+
+    abort(); // kills app
   }
-
-  const char *test_barcode = "12345";
-
-  send_barcode_post(test_barcode);
-
-  vTaskDelay(pdMS_TO_TICKS(1000));
 }
