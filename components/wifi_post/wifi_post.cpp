@@ -54,7 +54,6 @@ esp_err_t connect_wifi()
 
     esp_netif_create_default_wifi_sta();
 
-    // setup wifi station with the default wifi configuration
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
@@ -76,8 +75,8 @@ esp_err_t connect_wifi()
 
     wifi_config_t wifi_config = {
         .sta = {
-            .ssid = "HONOR 90",
-            .password = "jpbo2636",
+            .ssid = "your-ssid",
+            .password = "your-password",
             .scan_method = WIFI_FAST_SCAN,
             .bssid_set = false,
             .bssid = {0},
