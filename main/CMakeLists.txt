@@ -1,5 +1,3 @@
 idf_component_register(SRCS "main.cpp"
-                       INCLUDE_DIRS "."
-                       REQUIRES cam spi_flash 
-                       )
-
+                       PRIV_REQUIRES cam spi_flash wifi_post
+                       INCLUDE_DIRS ".")
